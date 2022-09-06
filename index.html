@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigate Between CD - Assignment</title>
+    <!-- internal css -->
+    <style>
+        .cd-conatiner {
+            margin-top: 30px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 2px solid black;
+            padding: 20px;
+            width: 250px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="cd-conatiner">
+        <p>Artist: <span id="artist"></span></p>
+        <p>Title: <span id="title"></span></p>
+        <p>Year: <span id="year"></span></p>
+        <br>
+        <button id="prev" onclick="previouscd()">
+            <span><<</span>
+        </button>
+        <button id="next" onclick="nextcd()">
+            <span>>></span>
+        </button>
+    </div>
+    <script>
+        // grab various elements by Id:
+        var artist = document.getElementById("artist");
+        var title = document.getElementById("title");
+        var year = document.getElementById("year");
+
+        // defining required variables globally:
+        var len;
+        var cd;
+        let i = 0;
+
+        // XMLHttps request:
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function () {
+            const xmlDoc = xhttp.responseXML;
+            cd = xmlDoc.getElementsByTagName("CD");
+            len = cd.length;
+            console.log(len);
+            displayCD(i)
+        }
+        xhttp.open("GET", "./cd_catalog.xml", true);
+        xhttp.send();
+
+        // function for previous cd:
+        function previouscd() {
+            if (i > 0) {
+                i--;
+                displayCD(i)
+            }
+        }
+
+        // function for next cd:
+        function nextcd() {
+            if (i < len - 1)
+                i++;
+            displayCD(i);
+        }
+
+        // function display cd:
+        function displayCD(i) {
+            artist.innerHTML = cd[i].getElementsByTagName("ARTIST")[0].childNodes[0].nodeValue;
+            title.innerHTML = cd[i].getElementsByTagName("TITLE")[0].childNodes[0].nodeValue;
+            year.innerHTML = cd[i].getElementsByTagName("YEAR")[0].childNodes[0].nodeValue;
+        }
+    </script>
+</body>
+
+</html>
